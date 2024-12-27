@@ -59,16 +59,17 @@ with dai.Device(pipeline, device_info) as device:
     while True:
         data = encoded.get().getData()  # Lấy dữ liệu từ DepthAI
         dataToSend = len(data)
-        startPos = 0
-        while startPos < dataToSend:
-            dataLeft = dataToSend - startPos
-            toSend = min(1400, dataLeft)  # Sử dụng min() để tìm kích thước gói
-            endPos = startPos + toSend
+        print(dataToSend)
+        # startPos = 0
+        # while startPos < dataToSend:
+        #     dataLeft = dataToSend - startPos
+        #     toSend = min(1400, dataLeft)  # Sử dụng min() để tìm kích thước gói
+        #     endPos = startPos + toSend
 
-            # Chuyển đổi phần dữ liệu từ numpy.ndarray thành bytearray
-            buffer = bytearray(data[startPos:endPos].tobytes())  # Sử dụng tobytes() để chuyển mảng numpy sang bytes
-            print(f"Sending {len(buffer)} / {dataLeft} {startPos} {endPos}")
-            startPos = endPos
-            sock.sendto(buffer, ("192.168.1.192", 5601))  # Gửi qua UDP tới địa chỉ và cổng
+            # # Chuyển đổi phần dữ liệu từ numpy.ndarray thành bytearray
+            # buffer = bytearray(data[startPos:endPos].tobytes())  # Sử dụng tobytes() để chuyển mảng numpy sang bytes
+            # print(f"Sending {len(buffer)} / {dataLeft} {startPos} {endPos}")
+            # startPos = endPos
+            # sock.sendto(buffer, ("192.168.1.192", 5601))  # Gửi qua UDP tới địa chỉ và cổng
 
 
