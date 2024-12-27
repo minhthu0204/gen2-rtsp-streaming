@@ -5,8 +5,8 @@ import depthai as dai
 import numpy as np
 
 # Địa chỉ và cổng UDP
-UDP_IP = "192.168.1.192"  # Địa chỉ IP máy nhận (localhost)
-UDP_PORT = 5601  # Cổng gửi dữ liệu
+UDP_IP = "192.168.1.69"  # Địa chỉ IP máy nhận (localhost)
+UDP_PORT = 5602  # Cổng gửi dữ liệu
 
 # Tạo socket UDP
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
