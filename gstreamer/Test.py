@@ -26,7 +26,12 @@ class UdpStream:
         self.data = data
         if self.pipeline:
             appsrc = self.pipeline.get_by_name('source')
-            appsrc.emit('push-buffer', Gst.Buffer.new_wrapped(self.data.tobytes()))
+            if appsrc:
+                # Chuyển đổi dữ liệu thành Gst.Buffer
+                buffer = Gst.Buffer.new_wrapped(self.data.tobytes())
+                retval = appsrc.emit('push-buffer', buffer)
+                if retval != Gst.FlowReturn.OK:
+                    print("Error pushing buffer:", retval)
 
     def setup_pipeline(self):
         self.pipeline = Gst.parse_launch(
@@ -34,14 +39,17 @@ class UdpStream:
             'h265parse ! rtph265pay pt=96 ! udpsink host={} port={}'.format(self.host, self.port)
         )
         appsrc = self.pipeline.get_by_name('source')
-        appsrc.connect('need-data', self.on_need_data)
+        if appsrc:
+            appsrc.connect('need-data', self.on_need_data)
         self.pipeline.set_state(Gst.State.PLAYING)
 
     def on_need_data(self, src, length):
         if self.data is not None:
-            retval = src.emit('push-buffer', Gst.Buffer.new_wrapped(self.data.tobytes()))
+            # Chuyển đổi dữ liệu thành Gst.Buffer khi cần
+            buffer = Gst.Buffer.new_wrapped(self.data.tobytes())
+            retval = src.emit('push-buffer', buffer)
             if retval != Gst.FlowReturn.OK:
-                print(retval)
+                print("Error pushing buffer:", retval)
 
 
 if __name__ == "__main__":
