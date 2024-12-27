@@ -2,13 +2,14 @@
 
 import socket
 import depthai as dai
+import numpy as np
 
-# # Địa chỉ và cổng UDP
-# UDP_IP = "127.0.0.1"  # Địa chỉ IP máy nhận (localhost)
-# UDP_PORT = 5005  # Cổng gửi dữ liệu
-#
-# # Tạo socket UDP
-# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# Địa chỉ và cổng UDP
+UDP_IP = "192.168.1.192"  # Địa chỉ IP máy nhận (localhost)
+UDP_PORT = 5601  # Cổng gửi dữ liệu
+
+# Tạo socket UDP
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # Tạo pipeline DepthAI
 pipeline = dai.Pipeline()
@@ -51,25 +52,12 @@ if device_info.protocol != dai.XLinkProtocol.X_LINK_USB_VSC:
 
 # Kết nối với thiết bị và gửi luồng video qua UDP
 with dai.Device(pipeline, device_info) as device:
-    seqNum = 0
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Tạo socket UDP
     encoded = device.getOutputQueue("encoded", maxSize=30, blocking=True)
-    print("Setup finished")
-    # print(f"Setup finished, sending H265 stream to UDP {UDP_IP}:{UDP_PORT}")
+    print(f"Setup finished, sending H265 stream to UDP {UDP_IP}:{UDP_PORT}")
     while True:
-        data = encoded.get().getData()  # Lấy dữ liệu từ DepthAI
-        dataToSend = len(data)
-        print(dataToSend)
-        # startPos = 0
-        # while startPos < dataToSend:
-        #     dataLeft = dataToSend - startPos
-        #     toSend = min(1400, dataLeft)  # Sử dụng min() để tìm kích thước gói
-        #     endPos = startPos + toSend
-
-            # # Chuyển đổi phần dữ liệu từ numpy.ndarray thành bytearray
-            # buffer = bytearray(data[startPos:endPos].tobytes())  # Sử dụng tobytes() để chuyển mảng numpy sang bytes
-            # print(f"Sending {len(buffer)} / {dataLeft} {startPos} {endPos}")
-            # startPos = endPos
-            # sock.sendto(buffer, ("192.168.1.192", 5601))  # Gửi qua UDP tới địa chỉ và cổng
-
-
+        # Lấy dữ liệu từ DepthAI
+        data = encoded.get().getData()
+        # Lấy dữ liệu từ DepthAI và chuyển thành C-contiguous array
+        data = np.ascontiguousarray(encoded.get().getData())
+        # Gửi dữ liệu qua UDP
+        sock.sendto(data, (UDP_IP, UDP_PORT))
