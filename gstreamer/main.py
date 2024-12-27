@@ -22,6 +22,8 @@ colorCam.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
 colorCam.setFps(FPS)
 
 videnc = pipeline.create(dai.node.VideoEncoder)
+videnc.setBitrate(2000)
+
 videnc.setDefaultProfilePreset(FPS, dai.VideoEncoderProperties.Profile.H265_MAIN)
 colorCam.video.link(videnc.input)
 
@@ -59,6 +61,7 @@ with dai.Device(pipeline, device_info) as device:
         data = encoded.get().getData()
         dataToSend = len(data)
         if(dataToSend < 60000):
+            print(dataToSend)
             data = np.ascontiguousarray(data)
             sock.sendto(data, (UDP_IP, UDP_PORT))
         else:
