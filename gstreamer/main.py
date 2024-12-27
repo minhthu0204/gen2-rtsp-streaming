@@ -57,7 +57,9 @@ with dai.Device(pipeline, device_info) as device:
     while True:
         # Lấy dữ liệu từ DepthAI
         data = encoded.get().getData()
+        dataToSend = len(data)
+        print(dataToSend)
         # Lấy dữ liệu từ DepthAI và chuyển thành C-contiguous array
-        data = np.ascontiguousarray(encoded.get().getData())
+        # data = np.ascontiguousarray(encoded.get().getData())
         # Gửi dữ liệu qua UDP
-        sock.sendto(data, (UDP_IP, UDP_PORT))
+        # sock.sendto(data, (UDP_IP, UDP_PORT))
