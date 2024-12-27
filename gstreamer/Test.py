@@ -7,7 +7,7 @@ from gi.repository import Gst, GLib
 import depthai as dai
 
 class UdpStream:
-    def __init__(self, host='192.168.1.69', port=5601):
+    def __init__(self, host='192.168.1.192', port=5601):
         Gst.init(None)
         self.host = host
         self.port = port
@@ -53,7 +53,7 @@ class UdpStream:
 
 
 if __name__ == "__main__":
-    server = UdpStream(host='192.168.1.69', port=5601)
+    server = UdpStream(host='192.168.1.192', port=5601)
     server.setup_pipeline()
 
     pipeline = dai.Pipeline()
