@@ -16,7 +16,7 @@ pipeline = dai.Pipeline()
 
 FPS = 30
 colorCam = pipeline.create(dai.node.ColorCamera)
-colorCam.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
+colorCam.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
 colorCam.setInterleaved(False)
 colorCam.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
 colorCam.setFps(FPS)
