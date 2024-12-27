@@ -14,7 +14,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Tạo pipeline DepthAI
 pipeline = dai.Pipeline()
 
-FPS = 30
+FPS = 10
 colorCam = pipeline.create(dai.node.ColorCamera)
 colorCam.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
 colorCam.setInterleaved(False)
