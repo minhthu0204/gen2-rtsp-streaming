@@ -154,13 +154,13 @@ if __name__ == "__main__":
         # leftQueue = device.getOutputQueue(name="left", maxSize=1)
 
         spatialCalcQueue = device.getOutputQueue(name="spatialData", maxSize=4, blocking=False)
-        fontType = cv2.FONT_HERSHEY_TRIPLEX
+        # fontType = cv2.FONT_HERSHEY_TRIPLEX
         encoded = device.getOutputQueue("encoded", maxSize=30, blocking=True)
         print("Setup finished, streaming video over UDP to {}:{}".format(server.host, server.port))
         while True:
             data = encoded.get().getData()
             server.send_data(data)
-            
+
             inDepth = depthQueue.get()
             depthFrame = inDepth.getFrame()  # Depth values in millimeters
 
