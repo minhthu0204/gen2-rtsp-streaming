@@ -96,5 +96,5 @@ if __name__ == "__main__":
         encoded = device.getOutputQueue("encoded", maxSize=30, blocking=True)
         print("Setup finished, streaming video over UDP to {}:{}".format(server.host, server.port))
         while True:
-            data = encoded.get().getData()
+            data = encoded.get()
             server.send_data(data)
