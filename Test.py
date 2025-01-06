@@ -7,7 +7,7 @@ from gi.repository import Gst, GLib
 import depthai as dai
 
 class UdpStream:
-    def __init__(self, host='192.168.1.192', port=5601):
+    def __init__(self, host='192.168.1.83', port=5601):
         Gst.init(None)
         self.host = host
         self.port = port
@@ -34,10 +34,17 @@ class UdpStream:
                     print("Error pushing buffer:", retval)
 
     def setup_pipeline(self):
+        # self.pipeline = Gst.parse_launch(
+        #     'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ! '
+        #     'h265parse ! rtph265pay pt=96 ! udpsink host={} port={}'.format(self.host, self.port)
+        # )
+        
+        
         self.pipeline = Gst.parse_launch(
             'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ! '
-            'h265parse ! rtph265pay pt=96 ! udpsink host={} port={}'.format(self.host, self.port)
+            'udpsink host={} port={}'.format(self.host, self.port)
         )
+
         appsrc = self.pipeline.get_by_name('source')
         if appsrc:
             appsrc.connect('need-data', self.on_need_data)
@@ -53,7 +60,7 @@ class UdpStream:
 
 
 if __name__ == "__main__":
-    server = UdpStream(host='192.168.1.192', port=5601)
+    server = UdpStream(host='192.168.1.83', port=5601)
     server.setup_pipeline()
 
     pipeline = dai.Pipeline()
